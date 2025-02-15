@@ -51,7 +51,9 @@ This will initialize the MongoDB, Backend, and Frontend containers. The applicat
 
 - Backend: `http://localhost:2000`
 
-- MongoDB: Exposed internally for backend communication
+- MongoDB: `http://localhost:27017`
+
+- MongoDB Express: `http://localhost:8081`
 
 ## Additional Notes
 
