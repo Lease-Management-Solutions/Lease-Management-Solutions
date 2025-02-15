@@ -5,9 +5,8 @@ services:
     image: mongo:latest
     container_name: mongo_db
     restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    env_file:
+      - .env  # Carrega o .env da raiz para o banco
     ports:
       - "27017:27017"
     volumes:
@@ -28,6 +27,25 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
       ME_CONFIG_MONGODB_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/
       ME_CONFIG_BASICAUTH: false
+    networks:
+      - lease_network
+
+  backend:
+    build: 
+      context: ./Lease-Management-Backend
+    container_name: lease_backend
+    restart: always
+    depends_on:
+      - mongodb
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./Lease-Management-Backend/.env  # Carrega o .env do backend
+    environment:
+      NODE_ENV: development
+      MONGO_URI: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/
+    volumes:
+      - ./Lease-Management-Backend:/app
     networks:
       - lease_network
 
