@@ -38,7 +38,7 @@ services:
     depends_on:
       - mongodb
     ports:
-      - "3000:3000"
+      - "2000:2000"
     env_file:
       - ./Lease-Management-Backend/.env  # Carrega o .env do backend
     environment:
@@ -48,6 +48,23 @@ services:
       - ./Lease-Management-Backend:/app
     networks:
       - lease_network
+
+  frontend:
+    build:
+      context: ./lease-management-frontend
+    container_name: lease_frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./lease-management-frontend:/app
+    environment:
+      - NODE_ENV=development
+    networks:
+      - lease_network
+
 
 networks:
   lease_network:
